@@ -64,8 +64,10 @@ datos <- datos[, c("fuente", "fecha_hora", "tipo", "url", "protocolo", "status",
 # Categorizamos la columna como fecha. 
 as.Date(datos$fecha_hora)
 
-# Recategorizamos la columna "status", ya que no conviene que sea numérica.
-datos$status <- as.character(datos$status)
+# Reclasificamos a factor las columnas "status", "tipo" y "protocolo", ya que tienen un número limitado de posibles categorías.
+datos$status <- factor(datos$status)
+datos$tipo <- factor(datos$tipo)
+datos$protocolo <- factor(datos$protocolo)
 
 
 
