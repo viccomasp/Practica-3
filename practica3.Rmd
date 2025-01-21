@@ -20,7 +20,12 @@ if (!require(tidyr)) install.packages("tidyr")
 # Cargamos el data frame con los datos.
 library(readr)
 library(dplyr)
-datos <- read_table("epa-http.csv", col_names = FALSE)
+
+# Cargamos los datos en crudo:
+datos_crudos <- read_table("epa-http.csv", col_names = FALSE)
+
+# Con la siguiente variable vamos a hacer una limpieza de los datos:
+datos <- datos_crudos
 
 # Renombramos las columnas para que sea más inteligible
 colnames(datos) <- c("fuente", "tiempo", "tipo", "url", "protocolo", "status", "bytes")
