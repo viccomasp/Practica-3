@@ -4,10 +4,34 @@ author: "Marc Carbonès, Gerald Nilton, Victor Comas"
 date: "2025-01-21"
 output: html_document
 ---
+# Librerías necesarias
+```{r}
+if (!require(readr)) install.packages("readr")
+if (!require(stringr)) install.packages("stringr")
+if (!require(dplyr)) install.packages("dplyr")
+if (!require(tidyr)) install.packages("tidyr")
+
+```
+
+
 # Exercici 1
 
 ```{r}
+# Cargamos el data frame con los datos.
+library(readr)
+library(dplyr)
+datos <- read_table("epa-http.csv", col_names = FALSE)
 
+# Renombramos las columnas para que sea más inteligible
+colnames(datos) <- c("fuente", "tiempo", "tipo", "url", "protocolo", "status", "bytes")
+
+# Quitamos las comillas dobles que tienen dos de las columnas.
+datos$tipo <- gsub('^"', '', datos$tipo)
+datos$protocolo <- gsub('"$', '', datos$protocolo)
+
+# Quitamos los claudátors que hay en la columna "tiempo".
+datos$tiempo <- gsub('^\\[', '', datos$tiempo)
+datos$tiempo <- gsub('\\]$', '', datos$tiempo)
 ```
 
 # Exercici 2
@@ -18,6 +42,32 @@ output: html_document
 
 # Exercici 3
 ```{r}
+library(tidyr)
+
+# Montamos la columna tiempo en formato de datos elegantes.
+# Primero separamos por tipo:
+datos <- datos %>%
+  separate(tiempo, into = c("dia", "hora", "minuto", "segundo"), sep = ":", convert = TRUE)
+
+# Ahora, suponiendo que los días corresponden a enero de 2025, lo ponemos en formato elegante.
+datos$fecha_hora <- as.POSIXct(
+  paste("2025-01", datos$dia, datos$hora, datos$minuto, datos$segundo, sep = "-"),
+  format = "%Y-%m-%d-%H-%M-%S"
+)
+
+# Eliminamos las columnas que nos sobran.
+datos <- datos %>% select(-dia, -hora, -minuto, -segundo)
+
+# Movemos la columna otra vez como segunda columna.
+datos <- datos[, c("fuente", "fecha_hora", "tipo", "url", "protocolo", "status", "bytes")]
+
+# Categorizamos la columna como fecha. 
+as.Date(datos$fecha_hora)
+
+# Recategorizamos la columna "status", ya que no conviene que sea numérica.
+datos$status <- as.character(datos$status)
+
+
 
 ```
 
