@@ -1,0 +1,60 @@
+---
+title: "Practica3"
+author: "Marc Carbonès, Gerald Nilton, Victor Comas"
+date: "2025-01-21"
+output: html_document
+---
+# Exercici 1
+
+```{r}
+
+```
+
+# Exercici 2
+```{r}
+
+```
+
+
+# Exercici 3
+```{r}
+
+```
+
+
+# Exercici 4
+```{r}
+
+```
+
+
+# Exercici 5
+```{r}
+
+```
+
+
+# Exercici 6
+```{r}
+
+```
+
+
+# Exercici 7
+```{r}
+
+```
+
+
+# Exercici 8
+```{r}
+
+```
+
+
+# Exercici 9
+```{r}
+
+```
+
+
