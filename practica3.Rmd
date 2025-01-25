@@ -36,9 +36,10 @@ colnames(datos) <- c("fuente", "tiempo", "tipo", "url", "protocolo", "status", "
 
 # Exercici 2
 
+Aquí se muestra un resumen de los datos directamente extraídos del data frame (tan solo hemos cambiado el nombre de las columnas). Como no hemos hecho aún la limpieza de los datos (entre otras cosas categorizar bien las variables) no nos da información muy útil. Además figura algún dato sin sentido, como la media de la variable "status". Por eso una vez tengamos limpiados los datos vamos a volver a hacer un resumen.
+
 ```{r}
-# Aquí se muestra un resumen de los datos directamente extraídos del data frame (tan solo hemos cambiado el nombre de las columnas). Como no hemos hecho aún la limpieza de los datos (entre otras cosas categorizar bien las variables) no nos da información muy útil. Además figura algún dato sin sentido, como la media de la variable "status". Por eso una vez tengamos limpiados los datos vamos a volver a hacer un resumen. 
-summary(datos)
+print(summary(datos))
 
 ```
 
@@ -92,15 +93,18 @@ Vemos como nos desglosa las variables:
 -   **protocolo**: *HTTP/0.2* (1) y HTTP/1.0 (47747).
 
 -   **status**: *200* (36712), *304* (5300), *302* (4506), *404* (611), *403* (272), *501* (272) y *otros* que serían el 500 y el 400. Lo podemos ver si hacemos el siguiente comando:
+
 ```{r}
 count(datos, status)
 ```
 
-Además nos desglosa la columna de las fechas y horas:
-* El mínimo "min" y el máximo "max".
-* El primer, segundo y tercer cuartil: "1st qu", "median" y "3rd qu" respectivamente.
-* La media de los valores "mean".
+Además nos desglosa la columna de las **fechas y horas**:
 
+-   El *mínimo* "min" y el *máximo* "max".
+
+-   El *primer, segundo y tercer cuartil*: "1st qu", "median" y "3rd qu" respectivamente.
+
+-   La *media* de los valores "mean".
 
 # Exercici 4
 
@@ -108,13 +112,22 @@ Además nos desglosa la columna de las fechas y horas:
 # Identificamos el número de usuarios únicos que hayan hecho una petición al servidor pero segregándolos según el código de status de la misma. 
 
 peticiones_unicas <- dplyr::count(datos, fuente, status)
+View(peticiones_unicas)
 
+```
+
+Como vemos, se muestra un data frame contabilizando cuantas peticiones se han hecho por parte de cada usuario separado por el código de status. El 200 Representa que la petición ha sido exitosa y los otros que aparecen significa que ha habido algún tipo de error.
+
+Si quisieramos mostrar la tabla anterior pero solo para las peticiones que han sido exitosas (código de status 200) podríamos hacer lo siguiente:
+
+```{r}
 # Ahora podemos agrupar según si la petición ha sido exitosa (código de status 200) o si no.
 peticiones_unicas_status <- peticiones_unicas %>%
   filter(status %in% c("200")) %>%
   group_by(status)
-
+View(peticiones_unicas_status)
 ```
+
 
 # Exercici 5
 
