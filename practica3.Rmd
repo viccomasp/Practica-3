@@ -81,6 +81,14 @@ datos$protocolo <- factor(datos$protocolo)
 
 # Exercici 4
 ```{r}
+# Identificamos el número de usuarios únicos que hayan hecho una petición al servidor pero segregándolos según el código de status de la misma. 
+
+peticiones_unicas <- dplyr::count(datos, fuente, status)
+
+# Ahora podemos agrupar según si la petición ha sido exitosa (código de status 200) o si no.
+peticiones_unicas_status <- peticiones_unicas %>%
+  filter(status %in% c("200")) %>%
+  group_by(status)
 
 ```
 
