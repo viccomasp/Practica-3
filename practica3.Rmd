@@ -4,7 +4,9 @@ author: "Marc Carbonès, Gerald Nilton, Victor Comas"
 date: "2025-01-21"
 output: html_document
 ---
+
 # Librerías necesarias
+
 ```{r}
 if (!require(readr)) install.packages("readr")
 if (!require(stringr)) install.packages("stringr")
@@ -12,7 +14,6 @@ if (!require(dplyr)) install.packages("dplyr")
 if (!require(tidyr)) install.packages("tidyr")
 
 ```
-
 
 # Exercici 1
 
@@ -30,6 +31,22 @@ datos <- datos_crudos
 # Renombramos las columnas para que sea más inteligible
 colnames(datos) <- c("fuente", "tiempo", "tipo", "url", "protocolo", "status", "bytes")
 
+
+```
+
+# Exercici 2
+
+```{r}
+# Aquí se muestra un resumen de los datos directamente extraídos del data frame (tan solo hemos cambiado el nombre de las columnas). Como no hemos hecho aún la limpieza de los datos (entre otras cosas categorizar bien las variables) no nos da información muy útil. Además figura algún dato sin sentido, como la media de la variable "status". Por eso una vez tengamos limpiados los datos vamos a volver a hacer un resumen. 
+summary(datos)
+
+```
+
+# Exercici 3
+
+```{r}
+library(tidyr)
+
 # Quitamos las comillas dobles que tienen dos de las columnas.
 datos$tipo <- gsub('^"', '', datos$tipo)
 datos$protocolo <- gsub('"$', '', datos$protocolo)
@@ -37,17 +54,6 @@ datos$protocolo <- gsub('"$', '', datos$protocolo)
 # Quitamos los claudátors que hay en la columna "tiempo".
 datos$tiempo <- gsub('^\\[', '', datos$tiempo)
 datos$tiempo <- gsub('\\]$', '', datos$tiempo)
-```
-
-# Exercici 2
-```{r}
-
-```
-
-
-# Exercici 3
-```{r}
-library(tidyr)
 
 # Montamos la columna tiempo en formato de datos elegantes.
 # Primero separamos por tipo:
@@ -74,12 +80,30 @@ datos$status <- factor(datos$status)
 datos$tipo <- factor(datos$tipo)
 datos$protocolo <- factor(datos$protocolo)
 
-
+# Ahora, una vez limpiados los datos, podemos hacer un resumen con más información.
+summary(datos)
 
 ```
 
+Vemos como nos desglosa las variables:
+
+-   **tipo**: *GET* (46020 coincidencias), *HEAD* (106) y *POST* (1622)
+
+-   **protocolo**: *HTTP/0.2* (1) y HTTP/1.0 (47747).
+
+-   **status**: *200* (36712), *304* (5300), *302* (4506), *404* (611), *403* (272), *501* (272) y *otros* que serían el 500 y el 400. Lo podemos ver si hacemos el siguiente comando:
+```{r}
+count(datos, status)
+```
+
+Además nos desglosa la columna de las fechas y horas:
+* El mínimo "min" y el máximo "max".
+* El primer, segundo y tercer cuartil: "1st qu", "median" y "3rd qu" respectivamente.
+* La media de los valores "mean".
+
 
 # Exercici 4
+
 ```{r}
 # Identificamos el número de usuarios únicos que hayan hecho una petición al servidor pero segregándolos según el código de status de la misma. 
 
@@ -92,34 +116,32 @@ peticiones_unicas_status <- peticiones_unicas %>%
 
 ```
 
-
 # Exercici 5
+
 ```{r}
 
 ```
-
 
 # Exercici 6
+
 ```{r}
 
 ```
-
 
 # Exercici 7
+
 ```{r}
 
 ```
-
 
 # Exercici 8
+
 ```{r}
 
 ```
-
 
 # Exercici 9
+
 ```{r}
 
 ```
-
-
