@@ -189,6 +189,37 @@ ggplot(datos, aes(x = fecha_hora)) +
 
 Gracias a este gráfico podemos ver, por ejemplo, que en el primer 25% de los datos ha habido bastantes más peticiones que en el segundo y tercer 25% (e incluso que el último 25%) de los datos. También observamos que hay una pequeña diferencia de cantidad de peticiones en las peticiones que representan desde el segundo hasta el tercer cuartil. Finalmente observamos a la izquierda algunos valores atípicos extraídos del data frame.
 
+
+A continuación haremos un "pie chart" con la frecuencia de los diferentes códigos de status de respuesta a las peticiones.
+```{r}
+que_status <- dplyr::count(datos, status)
+
+que_status$status <- factor(que_status$status)
+
+library(RColorBrewer)
+
+ggplot(que_status, aes(x = "", y = n, fill= status)) + 
+  geom_bar(stat = "identity") + 
+  coord_polar("y") + 
+  labs(title = "Porcentaje de status", fill = "Status code") + 
+  scale_fill_brewer(palette = "Dark2") +
+  theme_void()
+```
+Vemos representada la frecuencia con la que sale cada status code de las peticiones. Observamos como el más común es la respuesta con éxito del servidor (200). Pero no se aprecian muy bien los códigos de status que salen pocas veces, por tanto vamos a hacer un segundo pie chart con tan solo las respuesta no exitosas de modo que podamos ver mejor qué error ha salido.
+
+```{r}
+que_status_error <- que_status %>%
+  dplyr::filter(status!=200)
+
+ggplot(que_status_error, aes(x = "", y = n, fill= status)) + 
+  geom_bar(stat = "identity") + 
+  coord_polar("y") + 
+  labs(title = "Porcentaje de status (no exitosos)", fill = "Status code") + 
+  scale_fill_brewer(palette = "Spectral") +
+  theme_void()
+```
+Ahora si que apreciamos a simple vista todos los códigos de error que figuran en el data frame. Por ejemplo los errores 302 y 304 son los que más aparecen y el 400 y 500, los que menos.
+
 # Exercici 7
 
 ```{r}
