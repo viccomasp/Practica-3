@@ -128,10 +128,33 @@ peticiones_unicas_status <- peticiones_unicas %>%
 View(peticiones_unicas_status)
 ```
 
-
 # Exercici 5
 
 ```{r}
+# Agrupamos de nuevo, pero ahora para ver la frecuencia de las distintas peticiones HTTP. En este caso tendremos solo 3: "GET", "POST" y "HEAD".
+peticiones_http <- dplyr::count(datos, tipo)
+peticiones_http
+
+```
+
+Vemos que hay 46020 peticiones por "GET", 106 por "HEAD", y 1622 por "POST".
+
+Lo siguiente es hacer lo mismo pero filtrando previamente por peticiones correspondientes a recursos ofrecidos de tipo imagen. Estos tipos
+
+```{r}
+# El primer paso es dejar claro qué extensiones pueden ser de tipo imagen:
+posibles_extensiones <- "\\.(jpg|jpeg|jfif|pjpeg|pjp|apng|png|svg|avif|gif|bmp|webp)$"
+
+# Creamos una nueva columna que refleje si el recurso es de tipo imagen o no. 
+datos$es_imagen <- grepl(posibles_extensiones, datos$url, ignore.case = TRUE)
+
+# De la anterior columna creamos un nuevo data frame únicamente con las peticiones a recursos de tipo imagen.
+datos_imagen <- datos[datos$es_imagen, ]
+
+# Finalmente identificamos la frecuencia de cada tipo de petición HTTP pero ahora filtrado por recurso de tipo imagen.
+peticiones_http_imagen <- dplyr::count(datos_imagen, tipo)
+peticiones_http_imagen
+
 
 ```
 
