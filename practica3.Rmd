@@ -272,6 +272,12 @@ wss <- sapply(1:10, function(k) {
   kmeans(datos_escalados, centers = k, nstart = 25)$tot.withinss
 })
 
+```
+
+# Exercici 9
+
+```{r}
+
 # Graficar la varianza intra-clúster
 plot(1:10, wss,
      type = "b", pch = 19, frame = FALSE,
@@ -289,18 +295,4 @@ ggplot(datos_one_hot, aes(x = bytes, y = tipo_GET, color = cluster_5)) +
   geom_point() +
   labs(title = "Clustering con k=5")
 
-
-
-
-
-
-```
-
-# Exercici 9
-
-```{r}
-ggplot(datos_one_hot, aes(x = tipo_GET, y = status_200, color = cluster)) +
-  geom_point() +
-  labs(title = "Clusters K-means")
-#Falta informació al campus per poder fer els exercicis 8 i 9.
 ```
