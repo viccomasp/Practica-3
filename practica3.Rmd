@@ -236,6 +236,7 @@ ggplot(datos, aes(x = fecha_hora)) +
   theme_minimal()
 ```
 Notamos como el gráfico se asemeja a una distribución normal, con una gran cantidad de peticiones entre las 7 de la mañana y las 18h y un ritmo más calmado en los extremos.  
+
 # Exercici 8
 
 ```{r}
