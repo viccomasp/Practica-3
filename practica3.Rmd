@@ -1,6 +1,6 @@
 ---
 title: "Practica3"
-author: "Marc Carbonès, Gerald Nilton, Victor Comas"
+author: "Marc Carbonés, Gerald Nilton, Victor Comas"
 date: "2025-01-21"
 output: html_document
 ---
@@ -260,10 +260,38 @@ datos_one_hot$es_imagen <- NULL
 datos_escalados <- scale(datos_one_hot)
 
 # Hacemos k-means para valores de k=3 y k=5.
-kmeans_result <- kmeans(datos_escalados, centers = 3, nstart = 25)
-kmeans_result2 <- kmeans(datos_escalados, centers = 5, nstart = 25)
+kmeans_result_3 <- kmeans(datos_escalados, centers = 3, nstart = 25)
+kmeans_result_5 <- kmeans(datos_escalados, centers = 5, nstart = 25)
 
-datos_one_hot$cluster <- as.factor(kmeans_result$cluster)
+datos_one_hot$cluster_3 <- as.factor(kmeans_result_3$cluster)
+datos_one_hot$cluster_5 <- as.factor(kmeans_result_5$cluster)
+
+
+# Calcular la varianza intra-clúster para diferentes valores de k
+wss <- sapply(1:10, function(k) {
+  kmeans(datos_escalados, centers = k, nstart = 25)$tot.withinss
+})
+
+# Graficar la varianza intra-clúster
+plot(1:10, wss,
+     type = "b", pch = 19, frame = FALSE,
+     xlab = "Número de clústeres (k)",
+     ylab = "Varianza intra-clúster")
+
+
+# Gráfico de dispersión para k=3
+ggplot(datos_one_hot, aes(x = bytes, y = tipo_GET, color = cluster_3)) +
+  geom_point() +
+  labs(title = "Clustering con k=3")
+
+# Gráfico de dispersión para k=5
+ggplot(datos_one_hot, aes(x = bytes, y = tipo_GET, color = cluster_5)) +
+  geom_point() +
+  labs(title = "Clustering con k=5")
+
+
+
+
 
 
 ```
