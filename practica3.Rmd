@@ -13,6 +13,8 @@ if (!require(stringr)) install.packages("stringr")
 if (!require(dplyr)) install.packages("dplyr")
 if (!require(tidyr)) install.packages("tidyr")
 if (!require(ggplot2)) install.packages("ggplot2")
+if (!require(mltools)) install.packages("mltools")
+
 
 ```
 
@@ -74,13 +76,13 @@ datos <- datos %>% select(-dia, -hora, -minuto, -segundo)
 # Movemos la columna otra vez como segunda columna.
 datos <- datos[, c("fuente", "fecha_hora", "tipo", "url", "protocolo", "status", "bytes")]
 
-# Categorizamos la columna como fecha. 
-as.Date(datos$fecha_hora)
-
 # Reclasificamos a factor las columnas "status", "tipo" y "protocolo", ya que tienen un número limitado de posibles categorías.
 datos$status <- factor(datos$status)
 datos$tipo <- factor(datos$tipo)
 datos$protocolo <- factor(datos$protocolo)
+
+# La columna bytes debería ser de tipo numérico:
+datos$bytes <- as.numeric(datos$bytes)
 
 # Ahora, una vez limpiados los datos, podemos hacer un resumen con más información.
 summary(datos)
@@ -237,11 +239,42 @@ Notamos como el gráfico se asemeja a una distribución normal, con una gran can
 # Exercici 8
 
 ```{r}
+# Librerías necesarias
+library(mltools)
+library(data.table)
+
+# Creamos nuevo data frame con el que vamos hacer el aprendizaje no supervisado.
+datos_one_hot <- one_hot(as.data.table(datos), sparsifyNAs = TRUE)
+
+# Reemplazamos los NA de la columna "bytes" por 0 para hacer el análisis de clústering.
+datos_one_hot$bytes[is.na(datos_one_hot$bytes)] <- 0
+
+# Descartamos columnas no numéricas:
+datos_one_hot$fuente <- NULL
+datos_one_hot$fecha_hora <- NULL
+datos_one_hot$url <- NULL
+datos_one_hot$es_imagen <- NULL
+
+# Escalamos datos para normalizarlos
+datos_escalados <- scale(datos_one_hot)
+
+# Aplicamos
+wss <- sapply(1:10, function(k) { kmeans(datos_escalados, centers = k, nstart = 25)$tot.withinss })
+
+# Hacemos k-means para valores de k=3 y k=5.
+kmeans_result <- kmeans(datos_escalados, centers = 3, nstart = 25)
+kmeans_result2 <- kmeans(datos_escalados, centers = 5, nstart = 25)
+
+datos_one_hot$cluster <- as.factor(kmeans_result$cluster)
+
 
 ```
 
 # Exercici 9
 
 ```{r}
-
+ggplot(datos_one_hot, aes(x = tipo_GET, y = status_200, color = cluster)) +
+  geom_point() +
+  labs(title = "Clusters K-means")
+#Falta informació al campus per poder fer els exercicis 8 i 9.
 ```
