@@ -215,7 +215,7 @@ ggplot(que_status_error, aes(x = "", y = n, fill= status)) +
   geom_bar(stat = "identity") + 
   coord_polar("y") + 
   labs(title = "Porcentaje de status (no exitosos)", fill = "Status code") + 
-  scale_fill_brewer(palette = "Spectral") +
+  scale_fill_brewer(palette = "Paired") +
   theme_void()
 ```
 Ahora si que apreciamos a simple vista todos los códigos de error que figuran en el data frame. Por ejemplo los errores 302 y 304 son los que más aparecen y el 400 y 500, los que menos.
@@ -223,9 +223,17 @@ Ahora si que apreciamos a simple vista todos los códigos de error que figuran e
 # Exercici 7
 
 ```{r}
-
+# Como ya tenemos la columna "fecha_hora" en formato POSIXct, solo nos queda generar el gráfico con ggplot2. El argumento binwidth es el intervalo de cada barra en segundos, en este caso 900 (15 minutos). 
+ggplot(datos, aes(x = fecha_hora)) +
+  geom_histogram(binwidth = 900, fill = "darkgrey", color = "black") +  
+  labs(
+    title = "Distribución de peticiones cada 15 minutos",
+    x = "Tiempo (fecha y hora)",
+    y = "Frecuencia de peticiones"
+  ) +
+  theme_minimal()
 ```
-
+Notamos como el gráfico se asemeja a una distribución normal, con una gran cantidad de peticiones entre las 7 de la mañana y las 18h y un ritmo más calmado en los extremos.  
 # Exercici 8
 
 ```{r}
