@@ -255,11 +255,9 @@ datos_one_hot$fecha_hora <- NULL
 datos_one_hot$url <- NULL
 datos_one_hot$es_imagen <- NULL
 
+# Desde aquí no sé como seguir
 # Escalamos datos para normalizarlos
 datos_escalados <- scale(datos_one_hot)
-
-# Aplicamos
-wss <- sapply(1:10, function(k) { kmeans(datos_escalados, centers = k, nstart = 25)$tot.withinss })
 
 # Hacemos k-means para valores de k=3 y k=5.
 kmeans_result <- kmeans(datos_escalados, centers = 3, nstart = 25)
